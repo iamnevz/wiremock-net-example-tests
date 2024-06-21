@@ -1,0 +1,63 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+- task: UseDotNet@2 
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    #version: '8.0.x'
+    version: '8.x'
+    packageType: sdk
+
+#- task: NuGetCommand@2
+#  displayName: 'Restore'
+#  inputs:
+#    command: 'restore'
+#    restoreSolution: '**/*.sln'
+#    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: restore
+    #projects: '**/*.[Tt]ests/*.csproj'
+    #projects: '**/*.Tests/*.csproj'
+    #projects: '**/*.csproj'
+    projects: '**/*.sln'
+
+#- script: dotnet build --configuration $(buildConfiguration)
+#  displayName: 'dotnet build $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: build
+    projects: '**/*.sln'
+    #arguments: '--configuration $(buildConfiguration)'
+    #arguments: '--configuration $(buildConfiguration) --no-restore '
+    arguments: >
+        --configuration $(buildConfiguration)
+        --no-restore
+
+#- script: dotnet test --configuration $(buildConfiguration)
+#  displayName: 'dotnet test $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: 'Test'
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    arguments: >
+        --configuration $(buildConfiguration)
+        --no-restore
+        --no-build
