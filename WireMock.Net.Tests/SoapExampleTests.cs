@@ -74,7 +74,7 @@
                         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
                     });
 
-            return serviceProvider.BuildServiceProvider().GetService<IHttpClientFactory>()!;
+            return serviceProvider.BuildServiceProvider().GetService<IHttpClientFactory>() !;
         }
 
         private void CreateSoapStub()
